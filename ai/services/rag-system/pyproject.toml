@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rag-system"
+version = "0.1.0"
+description = "Medical RAG system with dialogue management (REST-only)"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.110.0,<0.112.0",
+    "uvicorn[standard]>=0.28.0,<0.31.0",
+    "pydantic>=2.6.0,<2.9.0",
+    "pydantic-settings>=2.2.0,<2.5.0",
+    "openai>=1.13.0,<1.40.0",
+    "qdrant-client>=1.8.0,<1.12.0",
+    "rank-bm25>=0.2.2,<0.3.0",
+    "sentence-transformers==2.7.0",
+    "transformers==4.41.2",
+    "tokenizers==0.19.1",
+    # torch отсутствует
+    "beautifulsoup4>=4.12.0,<4.13.0",
+    "html2text>=2020.1.16,<2021.0.0",
+    "charset-normalizer>=3.3.0,<3.4.0",
+    "lxml>=5.0.0,<5.3.0",
+    "redis>=5.0.0,<5.1.0",
+    "structlog>=24.0.0,<24.5.0",
+    "python-dotenv>=1.0.0,<1.1.0",
+    "httpx>=0.27.0,<0.28.0",
+    "tenacity>=8.2.0,<8.4.0",
+]
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "A", "C4", "DTZ", "T20", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+plugins = ["pydantic.mypy"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["test/python"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = ""
+
+[tool.coverage.run]
+omit = [
+    "src/main.py",
+    "src/rag/core/logger.py",
+    "src/rag/medical/profile_client.py",
+    "src/rag/retrieval/reranker.py",
+    "src/rag/api/endpoints/documents.py",
+    "src/rag/*/__init__.py",
+]
